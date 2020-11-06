@@ -186,14 +186,48 @@ private extension NativeAdView {
         switch type {
         case .full: setupFullLayout()
         case .banner: setupBannerLayout()
-        case .custom: setupBannerLayout()
-        case .custom1: setupBannerLayout()
+        case .custom: setupCustomLayout()
+        case .custom1: setupCustomLayout1()
         }
     }
     
-    func setupFullLayout() {
+    func setupCustomLayout() {
+            adBodyLbl.numberOfLines = 2
+
+            callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+            
+            adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
+
+            addSubview(adLabelView)
+            adLabelView.autoPinEdge(toSuperviewEdge: .top)
+            adLabelView.autoPinEdge(toSuperviewEdge: .leading)
+
+            let contentView = UIView()
+            addSubview(contentView)
+            contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+            contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 5)
+
+        let layout = StackLayout().spacing(5).direction(.vertical).children([
+                            StackLayout().spacing(5).children([
+                            adHeadLineLbl,adIconView
+                            ]),
+                            callToActionBtn
+                        ])
+            layout.isUserInteractionEnabled = false
+            contentView.addSubview(layout)
+            layout.autoAlignAxis(toSuperviewAxis: .horizontal)
+            layout.autoPinEdge(toSuperviewEdge: .leading)
+            layout.autoPinEdge(toSuperviewEdge: .trailing)
+            layout.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
+            layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
+    
+            callToActionBtn.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+            callToActionBtn.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        }
+
+    func setupCustomLayout1() {
         adBodyLbl.numberOfLines = 2
-        
+
         let infoLayout = StackLayout().spacing(5).children([
             adIconView,
             StackLayout().direction(.vertical).children([
@@ -205,9 +239,9 @@ private extension NativeAdView {
                 ]),
             ]),
         ])
-        
+
         callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
+
         let actionLayout = StackLayout()
             .spacing(5)
             .children([
@@ -216,19 +250,19 @@ private extension NativeAdView {
                 adStoreLbl,
                 callToActionBtn
             ])
-        
+
         adBodyLbl.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
         adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
-        
+
         addSubview(adLabelView)
         adLabelView.autoPinEdge(toSuperviewEdge: .top)
         adLabelView.autoPinEdge(toSuperviewEdge: .leading)
-        
+
         let contentView = UIView()
         addSubview(contentView)
         contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 5)
-        
+
         let layout = StackLayout()
             .direction(.vertical)
             .spacing(5)
@@ -246,22 +280,74 @@ private extension NativeAdView {
         layout.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
         layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
     }
-    
-    func setupBannerLayout() {
+
+    func setupFullLayout() {
         adBodyLbl.numberOfLines = 2
-        
+
+        let infoLayout = StackLayout().spacing(5).children([
+            adIconView,
+            StackLayout().direction(.vertical).children([
+                adHeadLineLbl,
+                StackLayout().children([
+                    adAdvertiserLbl,
+                    adRatingView,
+                    UIView()
+                ]),
+            ]),
+        ])
+
         callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        callToActionBtn.autoSetDimension(.height, toSize: 50)
+
+
+        adBodyLbl.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
         adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
-        
+
         addSubview(adLabelView)
         adLabelView.autoPinEdge(toSuperviewEdge: .top)
         adLabelView.autoPinEdge(toSuperviewEdge: .leading)
-        
+
+        let contentView = UIView()
+        addSubview(contentView)
+        contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+        contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 0)
+        let actionLayout = StackLayout()
+                    .spacing(5)
+                    .children([
+                        infoLayout,
+                        callToActionBtn
+                    ])
+        let layout = StackLayout()
+            .direction(.vertical)
+            .spacing(5)
+            .children([
+                actionLayout,
+                adBodyLbl
+            ])
+        layout.isUserInteractionEnabled = false
+        contentView.addSubview(layout)
+        layout.autoAlignAxis(toSuperviewAxis: .horizontal)
+        layout.autoPinEdge(toSuperviewEdge: .leading)
+        layout.autoPinEdge(toSuperviewEdge: .trailing)
+        layout.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
+        layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
+    }
+    
+    func setupBannerLayout() {
+        adBodyLbl.numberOfLines = 2
+
+        callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
+
+        addSubview(adLabelView)
+        adLabelView.autoPinEdge(toSuperviewEdge: .top)
+        adLabelView.autoPinEdge(toSuperviewEdge: .leading)
+
         let contentView = UIView()
         addSubview(contentView)
         contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 5)
-        
+
         let layout = StackLayout().spacing(5).children([
             adIconView,
             StackLayout().direction(.vertical).children([
