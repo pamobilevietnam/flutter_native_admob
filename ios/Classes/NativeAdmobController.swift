@@ -23,8 +23,10 @@ class NativeAdmobController: NSObject {
     let channel: FlutterMethodChannel
     
     var nativeAdChanged: ((GADUnifiedNativeAd?) -> Void)?
+
+    var nativeAdList = [GADUnifiedNativeAd]()
     var nativeAd: GADUnifiedNativeAd? {
-        didSet { invokeLoadCompleted() }
+        didSet {}
     }
     
     private var adLoader: GADAdLoader?
@@ -50,6 +52,13 @@ class NativeAdmobController: NSObject {
             }
             let isChanged = adUnitID != self.adUnitID
             self.adUnitID = adUnitID
+
+            if(isChanged){
+                if(nativeAdList.count > 0){
+                    nativeAdList.removeAll()
+               }
+            }
+
             if adLoader == nil || isChanged {
                 let numberAds: Int = params?["numberAds"] as? Int ?? 1
                 let multipleAdsOptions = GADMultipleAdsAdLoaderOptions()
@@ -101,6 +110,9 @@ class NativeAdmobController: NSObject {
     
     private func invokeLoadCompleted() {
         nativeAdChanged?(nativeAd)
+        if let randomElement = nativeAdList.randomElement() {
+            nativeAd = randomElement
+        }
         channel.invokeMethod(LoadState.loadCompleted.rawValue, arguments: nil)
     }
 }
@@ -113,7 +125,14 @@ extension NativeAdmobController: GADUnifiedNativeAdLoaderDelegate {
     }
     
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADUnifiedNativeAd) {
-        self.nativeAd = nativeAd
+        
+        self.nativeAdList.append(nativeAd)
+        if(self.nativeAd == nil){
+            self.nativeAd = nativeAd
+            invokeLoadCompleted()
+        }else{
+            self.nativeAd = self.nativeAdList.randomElement()
+        }
     }
 }
 

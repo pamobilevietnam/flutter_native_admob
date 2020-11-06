@@ -4,6 +4,7 @@
 //
 //  Created by Dao Duy Duong on 3/8/20.
 //
+
 import UIKit
 import GoogleMobileAds
 
@@ -331,8 +332,8 @@ private extension NativeAdView {
         layout.autoPinEdge(toSuperviewEdge: .trailing)
         layout.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
         layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
-        callToActionBtn.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
-        callToActionBtn.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        callToActionBtn.autoPinEdge(toSuperviewEdge: .left, withInset: 0)
+        callToActionBtn.autoPinEdge(toSuperviewEdge: .right, withInset: 0)
     }
     
     func setupBannerLayout() {
@@ -403,7 +404,6 @@ private extension NativeAdView {
         callToActionBtn.setTitleColor(options.callToActionStyle.color, for: .normal)
         callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: options.callToActionStyle.fontSize)
         if let bgColor = options.callToActionStyle.backgroundColor {
-            print(bgColor)
             callToActionBtn.setBackgroundImage(.from(color: bgColor), for: .normal)
         }
         callToActionBtn.isHidden = !options.callToActionStyle.isVisible
