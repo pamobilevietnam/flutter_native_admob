@@ -19,7 +19,7 @@ class NativeAdmobController {
   MethodChannel _channel;
   String _adUnitID;
 
-  NativeAdmobController() {
+  NativeAdmobController({String adUnitID,String numberAds,List<String> testDevices}) {
     _channel = MethodChannel(id);
     _channel.setMethodCallHandler(_handleMessages);
 
@@ -27,6 +27,12 @@ class NativeAdmobController {
     _pluginChannel.invokeMethod("initController", {
       "controllerID": id,
     });
+    if(testDevices != null){
+      setTestDeviceIds(testDevices);
+    }
+    if(adUnitID != null){
+      setAdUnitID(adUnitID);
+    }
   }
 
   void dispose() {

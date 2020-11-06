@@ -95,10 +95,13 @@ class NativePlatformView(
     }
 
     view = NativeAdView(context, type)
-
+    println("new NativeAdView")
     (map["controllerID"] as? String)?.let { id ->
       val controller = NativeAdmobControllerManager.getController(id)
-      controller?.nativeAdChanged = { view.setNativeAd(it) }
+      controller?.nativeAdChanged = {
+        view.setNativeAd(it)
+        println(" nativeAdChanged")
+      }
       this.controller = controller
     }
 
@@ -107,7 +110,12 @@ class NativePlatformView(
     } ?: NativeAdmobOptions()
 
     controller?.nativeAd?.let {
-      view.setNativeAd(it)
+      println(" setNativeAd")
+//      if(controller?.listNativeAd.size > 0){
+//        view.setNativeAd(it)
+//      }else{
+        view.setNativeAd(it)
+//      }
     }
   }
 

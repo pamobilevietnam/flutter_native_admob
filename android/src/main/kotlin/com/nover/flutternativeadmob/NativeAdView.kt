@@ -13,7 +13,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 
 enum class NativeAdmobType {
-  full, banner
+  full, banner, custom, custom1
 }
 
 class NativeAdView @JvmOverloads constructor(
@@ -48,6 +48,8 @@ class NativeAdView @JvmOverloads constructor(
     val layout = when (type) {
       NativeAdmobType.full -> R.layout.native_admob_full_view
       NativeAdmobType.banner -> R.layout.native_admob_banner_view
+      NativeAdmobType.custom -> R.layout.native_admob_custom_view
+      NativeAdmobType.custom1 -> R.layout.native_admob_custom1_view
     }
     inflater.inflate(layout, this, true)
 

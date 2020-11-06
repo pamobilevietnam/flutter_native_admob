@@ -19,7 +19,12 @@ class NativeTextStyle(
     }
 
     (data["backgroundColor"] as? String)?.let {
-      backgroundColor = Color.parseColor(it)
+      try {
+        backgroundColor = Color.parseColor(it)
+      }
+      catch (e: IllegalArgumentException) {
+        backgroundColor = Color.TRANSPARENT
+      }
     }
 
     (data["isVisible"] as? Boolean)?.let {

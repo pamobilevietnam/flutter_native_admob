@@ -9,7 +9,7 @@ import UIKit
 import GoogleMobileAds
 
 enum NativeAdmobType: String {
-    case banner, full
+    case banner, full, custom, custom1
 }
 
 class NativeAdView: GADUnifiedNativeAdView {
@@ -186,6 +186,8 @@ private extension NativeAdView {
         switch type {
         case .full: setupFullLayout()
         case .banner: setupBannerLayout()
+        case .custom: setupBannerLayout()
+        case .custom1: setupBannerLayout()
         }
     }
     

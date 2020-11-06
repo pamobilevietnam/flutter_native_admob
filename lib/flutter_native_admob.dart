@@ -9,7 +9,7 @@ import 'native_admob_options.dart';
 
 const _viewType = "native_admob";
 
-enum NativeAdmobType { banner, full }
+enum NativeAdmobType { banner, full, custom, custom1 }
 
 class NativeAdmob extends StatefulWidget {
   final String adUnitID;
