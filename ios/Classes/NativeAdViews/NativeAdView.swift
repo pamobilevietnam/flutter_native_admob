@@ -4,7 +4,6 @@
 //
 //  Created by Dao Duy Duong on 3/8/20.
 //
-
 import UIKit
 import GoogleMobileAds
 
@@ -87,7 +86,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        button.autoSetDimension(.height, toSize: 30)
+        button.autoSetDimension(.height, toSize: 50)
         return button
     }()
     
@@ -137,7 +136,7 @@ class NativeAdView: GADUnifiedNativeAdView {
             adBodyLbl.isHidden = true
         }
         
-        callToActionBtn.setTitle(nativeAd.callToAction, for: .normal)
+        callToActionBtn.setTitle(nativeAd.callToAction?.uppercased(), for: .normal)
         if nativeAd.callToAction.isNilOrEmpty {
             callToActionBtn.isHidden = true
         }
@@ -186,12 +185,12 @@ private extension NativeAdView {
         switch type {
         case .full: setupFullLayout()
         case .banner: setupBannerLayout()
-        case .custom: setupCustomLayout()
+        case .custom: setupFullCustomLayout()
         case .custom1: setupCustomLayout1()
         }
     }
-    
-    func setupCustomLayout() {
+
+    func setupFullCustomLayout() {
             adBodyLbl.numberOfLines = 2
 
             callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -297,8 +296,12 @@ private extension NativeAdView {
         ])
 
         callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        callToActionBtn.autoSetDimension(.height, toSize: 50)
 
+        let actionLayout = StackLayout()
+            .spacing(5)
+            .children([
+                callToActionBtn
+            ])
 
         adBodyLbl.autoSetDimension(.height, toSize: 20, relation: .greaterThanOrEqual)
         adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
@@ -310,19 +313,16 @@ private extension NativeAdView {
         let contentView = UIView()
         addSubview(contentView)
         contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-        contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 0)
-        let actionLayout = StackLayout()
-                    .spacing(5)
-                    .children([
-                        infoLayout,
-                        callToActionBtn
-                    ])
+        contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 5)
+
         let layout = StackLayout()
             .direction(.vertical)
             .spacing(5)
             .children([
-                actionLayout,
-                adBodyLbl
+                adMediaView,
+                infoLayout,
+                adBodyLbl,
+                actionLayout
             ])
         layout.isUserInteractionEnabled = false
         contentView.addSubview(layout)
@@ -331,23 +331,25 @@ private extension NativeAdView {
         layout.autoPinEdge(toSuperviewEdge: .trailing)
         layout.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
         layout.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
+        callToActionBtn.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+        callToActionBtn.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
     }
     
     func setupBannerLayout() {
         adBodyLbl.numberOfLines = 2
-
+        
         callToActionBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         adLabelLbl.autoSetDimension(.height, toSize: 15, relation: .greaterThanOrEqual)
-
+        
         addSubview(adLabelView)
         adLabelView.autoPinEdge(toSuperviewEdge: .top)
         adLabelView.autoPinEdge(toSuperviewEdge: .leading)
-
+        
         let contentView = UIView()
         addSubview(contentView)
         contentView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         contentView.autoPinEdge(.top, to: .bottom, of: adLabelView, withOffset: 5)
-
+        
         let layout = StackLayout().spacing(5).children([
             adIconView,
             StackLayout().direction(.vertical).children([
@@ -401,6 +403,7 @@ private extension NativeAdView {
         callToActionBtn.setTitleColor(options.callToActionStyle.color, for: .normal)
         callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: options.callToActionStyle.fontSize)
         if let bgColor = options.callToActionStyle.backgroundColor {
+            print(bgColor)
             callToActionBtn.setBackgroundImage(.from(color: bgColor), for: .normal)
         }
         callToActionBtn.isHidden = !options.callToActionStyle.isVisible
